@@ -1,0 +1,265 @@
+/* Sakshi Suit Collection — Premium Styles */
+
+:root {
+  --plum: #511c39;
+  --plum-dark: #351827;
+  --gold: #c49a57;
+  --ivory: #fffaf4;
+  --cream: #f7eee7;
+  --text: #351827;
+  --muted: #806a71;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--ivory);
+  color: var(--text);
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+header {
+  background: var(--plum);
+  color: var(--ivory);
+  padding: 20px 7%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.brand {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.brand span {
+  color: #e6c17b;
+}
+
+nav {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+
+nav a {
+  color: var(--ivory);
+  text-decoration: none;
+  font: 14px Arial, sans-serif;
+}
+
+nav a:hover {
+  color: #e6c17b;
+}
+
+.hero {
+  min-height: 470px;
+  padding: 75px 8%;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(115deg, #f8e9dc, var(--ivory) 65%);
+}
+
+.hero-content {
+  max-width: 650px;
+}
+
+.eyebrow {
+  color: #98652e;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font: bold 12px Arial, sans-serif;
+}
+
+h1 {
+  font-size: clamp(42px, 7vw, 76px);
+  line-height: 1.08;
+  margin: 20px 0;
+}
+
+h1 span {
+  color: #8a3457;
+  font-style: italic;
+}
+
+.hero p,
+.visit p {
+  font: 16px/1.8 Arial, sans-serif;
+  color: var(--muted);
+}
+
+.hero p {
+  max-width: 490px;
+}
+
+.btn {
+  display: inline-block;
+  margin-top: 28px;
+  padding: 14px 25px;
+  background: #702847;
+  color: white;
+  text-decoration: none;
+  border: 1px solid #702847;
+  font: bold 13px Arial, sans-serif;
+  letter-spacing: 1px;
+}
+
+.btn:hover {
+  background: var(--plum-dark);
+}
+
+section {
+  padding: 65px 7%;
+}
+
+.section-heading {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.section-heading p {
+  color: #98652e;
+  font: bold 11px Arial, sans-serif;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+h2 {
+  font-size: clamp(30px, 4vw, 42px);
+  margin-top: 10px;
+}
+
+.categories {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.category {
+  padding: 30px 12px;
+  text-align: center;
+  background: #f4e5da;
+  border-bottom: 3px solid var(--gold);
+}
+
+.category .symbol {
+  font-size: 34px;
+  margin-bottom: 12px;
+}
+
+.category h3 {
+  font-size: 19px;
+}
+
+.category p,
+.product p {
+  font: 13px/1.6 Arial, sans-serif;
+  color: var(--muted);
+}
+
+.collection {
+  background: var(--cream);
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.product {
+  background: var(--ivory);
+  padding-bottom: 20px;
+  text-align: center;
+  border: 1px solid #ead9ca;
+}
+
+.product-art {
+  height: 210px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 70px;
+  background: linear-gradient(145deg, #ead2c5, #f8eee5);
+}
+
+.product h3 {
+  font-size: 20px;
+  margin: 18px 10px 8px;
+}
+
+.product p {
+  padding: 0 12px;
+}
+
+.note {
+  font: 13px/1.8 Arial, sans-serif;
+  text-align: center;
+  color: var(--muted);
+  margin-top: 28px;
+}
+
+.visit {
+  text-align: center;
+}
+
+.visit p {
+  margin-top: 14px;
+}
+
+footer {
+  padding: 28px 7%;
+  text-align: center;
+  background: var(--plum-dark);
+  color: #f9eedd;
+  font: 12px/1.8 Arial, sans-serif;
+}
+
+@media (max-width: 700px) {
+  header {
+    padding: 18px 5%;
+  }
+
+  .brand {
+    font-size: 21px;
+  }
+
+  nav {
+    gap: 13px;
+  }
+
+  nav a {
+    font-size: 12px;
+  }
+
+  .hero {
+    padding: 65px 6%;
+    min-height: 400px;
+  }
+
+  section {
+    padding: 48px 5%;
+  }
+
+  .categories {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .products {
+    grid-template-columns: 1fr;
+  }
+
+  .product-art {
+    height: 190px;
+  }
+}
