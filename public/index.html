@@ -2,133 +2,205 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Discover elegant suits, kurtis, gowns and party wear at Sakshi Suit Collection, Gwalior.">
-  <meta name="theme-color" content="#511c39">
-  <title>Sakshi Suit Collection | Elegance in Every Thread</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#581c3b">
+  <meta name="description" content="Discover beautiful suits, kurtis, gowns and party wear at Sakshi Suit Collection, Gwalior.">
+  <title>Sakshi Suit Collection | Ethnic Wear</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <a class="brand" href="#home" aria-label="Sakshi Suit Collection Home">
-      Sakshi <span>Suit Collection</span>
+  <div class="announcement">
+    Elegance for every occasion · Visit our store in Gwalior
+  </div>
+
+  <header class="site-header">
+    <a class="brand" href="#home">
+      <span class="brand-name">Sakshi</span>
+      <span class="brand-subtitle">SUIT COLLECTION</span>
     </a>
 
-    <nav aria-label="Main navigation">
+    <nav class="main-nav" aria-label="Main navigation">
       <a href="#home">Home</a>
       <a href="#categories">Collections</a>
-      <a href="#collection">Featured</a>
-      <a href="#visit">Visit Us</a>
+      <a href="#products">New Arrivals</a>
+      <a href="#visit">Our Store</a>
     </nav>
+
+    <div class="header-actions">
+      <button id="favorites-button" class="icon-button" type="button"
+        aria-label="View favourites">
+        ♡ <span id="favorites-count">0</span>
+      </button>
+      <a class="admin-button" href="/admin.html">Admin Login</a>
+    </div>
   </header>
 
   <main>
     <section class="hero" id="home">
       <div class="hero-content">
-        <div class="eyebrow">Tradition • Grace • Elegance</div>
-        <h1>Elegance in <span>Every Thread.</span></h1>
-        <p>
-          Discover beautiful ethnic wear for every occasion.
-          From timeless suits to graceful kurtis and stunning gowns,
-          find a style that feels uniquely yours.
+        <p class="eyebrow">THE ART OF ETHNIC ELEGANCE</p>
+        <h1>Style that tells<br>your <em>story.</em></h1>
+        <p class="hero-description">
+          Discover timeless ethnic wear, graceful silhouettes and
+          beautiful designs made for your special moments.
         </p>
-        <a class="btn" href="#collection">EXPLORE COLLECTION</a>
+        <a class="primary-button" href="#products">EXPLORE COLLECTION ↗</a>
+        <p class="hero-note">Suits · Kurtis · Gowns · Party Wear</p>
+      </div>
+
+      <div class="hero-image">
+        <img
+          src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1000&q=85"
+          alt="Elegant traditional ethnic fashion"
+          fetchpriority="high">
+        <div class="image-caption">
+          <span>TIMELESS BEAUTY</span>
+          <span>Made for your moments ✦</span>
+        </div>
+      </div>
+      <span class="hero-decoration" aria-hidden="true">✳</span>
+    </section>
+
+    <section class="category-section" id="categories">
+      <div class="section-heading">
+        <p class="eyebrow">FIND YOUR FAVOURITE</p>
+        <h2>Shop by <em>Category</em></h2>
+        <p>Something beautiful for every occasion.</p>
+      </div>
+
+      <div class="category-grid">
+        <button class="category-card" type="button" data-category="Suits">
+          <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e4?auto=format&fit=crop&w=600&q=80" alt="Traditional clothing">
+          <span>Suits <b>↗</b></span>
+        </button>
+        <button class="category-card" type="button" data-category="Kurtis">
+          <img src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=600&q=80" alt="Women's fashion">
+          <span>Kurtis <b>↗</b></span>
+        </button>
+        <button class="category-card" type="button" data-category="Gowns">
+          <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=600&q=80" alt="Elegant gown">
+          <span>Gowns <b>↗</b></span>
+        </button>
+        <button class="category-card" type="button" data-category="Party Wear">
+          <img src="https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=600&q=80" alt="Party wear fashion">
+          <span>Party Wear <b>↗</b></span>
+        </button>
       </div>
     </section>
 
-    <section id="categories">
-      <div class="section-heading">
-        <p>Find Your Style</p>
-        <h2>Our Collections</h2>
+    <section class="products-section" id="products">
+      <div class="products-heading">
+        <div class="section-heading">
+          <p class="eyebrow">CURATED WITH LOVE</p>
+          <h2>Our Latest <em>Collection</em></h2>
+          <p>Explore styles we think you'll love.</p>
+        </div>
+
+        <label class="search-box">
+          <span aria-hidden="true">⌕</span>
+          <input id="product-search" type="search"
+            placeholder="Search collection..." aria-label="Search products">
+        </label>
       </div>
 
-      <div class="categories">
-        <article class="category">
-          <div class="symbol" aria-hidden="true">✿</div>
-          <h3>Elegant Suits</h3>
-          <p>Classic ethnic styles</p>
-        </article>
-
-        <article class="category">
-          <div class="symbol" aria-hidden="true">❀</div>
-          <h3>Kurtis</h3>
-          <p>Everyday elegance</p>
-        </article>
-
-        <article class="category">
-          <div class="symbol" aria-hidden="true">♕</div>
-          <h3>Gowns</h3>
-          <p>Make every moment special</p>
-        </article>
-
-        <article class="category">
-          <div class="symbol" aria-hidden="true">✧</div>
-          <h3>Party Wear</h3>
-          <p>Celebrate in style</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="collection" id="collection">
-      <div class="section-heading">
-        <p>Handpicked For You</p>
-        <h2>Featured Collection</h2>
+      <div class="filter-list" aria-label="Filter products">
+        <button class="filter-button active" type="button" data-filter="All">All</button>
+        <button class="filter-button" type="button" data-filter="Suits">Suits</button>
+        <button class="filter-button" type="button" data-filter="Kurtis">Kurtis</button>
+        <button class="filter-button" type="button" data-filter="Gowns">Gowns</button>
+        <button class="filter-button" type="button" data-filter="Party Wear">Party Wear</button>
       </div>
 
-      <div class="products">
-        <article class="product">
-          <div class="product-art" aria-hidden="true">🌸</div>
-          <h3>Traditional Suits</h3>
-          <p>Beautiful designs for everyday wear and celebrations.</p>
+      <div class="product-grid" id="product-grid">
+        <article class="product-card" data-category="Suits" data-name="Floral Ethnic Suit" data-price="1299" data-id="suit-1">
+          <div class="product-image">
+            <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=700&q=80" alt="Floral ethnic suit" loading="lazy">
+            <span class="product-label">POPULAR</span>
+            <button class="favorite-toggle" type="button" aria-label="Add Floral Ethnic Suit to favourites" aria-pressed="false">♡</button>
+          </div>
+          <div class="product-info">
+            <p class="product-category">ETHNIC SUITS</p>
+            <h3>Floral Ethnic Suit</h3>
+            <div class="product-bottom"><strong>₹1,299</strong><button class="enquire-button" type="button" data-enquire="Floral Ethnic Suit">Enquire ↗</button></div>
+          </div>
         </article>
 
-        <article class="product">
-          <div class="product-art" aria-hidden="true">🌷</div>
-          <h3>Graceful Kurtis</h3>
-          <p>Effortless styles that bring comfort and elegance together.</p>
+        <article class="product-card" data-category="Kurtis" data-name="Everyday Grace Kurti" data-price="699" data-id="kurti-1">
+          <div class="product-image">
+            <img src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=700&q=80" alt="Women's kurti style" loading="lazy">
+            <button class="favorite-toggle" type="button" aria-label="Add Everyday Grace Kurti to favourites" aria-pressed="false">♡</button>
+          </div>
+          <div class="product-info">
+            <p class="product-category">KURTIS</p>
+            <h3>Everyday Grace Kurti</h3>
+            <div class="product-bottom"><strong>₹699</strong><button class="enquire-button" type="button" data-enquire="Everyday Grace Kurti">Enquire ↗</button></div>
+          </div>
         </article>
 
-        <article class="product">
-          <div class="product-art" aria-hidden="true">✨</div>
-          <h3>Statement Gowns</h3>
-          <p>Find a special look for your memorable occasions.</p>
+        <article class="product-card" data-category="Gowns" data-name="Elegant Evening Gown" data-price="1999" data-id="gown-1">
+          <div class="product-image">
+            <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=700&q=80" alt="Elegant evening gown" loading="lazy">
+            <span class="product-label">NEW STYLE</span>
+            <button class="favorite-toggle" type="button" aria-label="Add Elegant Evening Gown to favourites" aria-pressed="false">♡</button>
+          </div>
+          <div class="product-info">
+            <p class="product-category">GOWNS</p>
+            <h3>Elegant Evening Gown</h3>
+            <div class="product-bottom"><strong>₹1,999</strong><button class="enquire-button" type="button" data-enquire="Elegant Evening Gown">Enquire ↗</button></div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="Party Wear" data-name="Celebration Wear" data-price="1599" data-id="party-1">
+          <div class="product-image">
+            <img src="https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=700&q=80" alt="Celebration party wear" loading="lazy">
+            <button class="favorite-toggle" type="button" aria-label="Add Celebration Wear to favourites" aria-pressed="false">♡</button>
+          </div>
+          <div class="product-info">
+            <p class="product-category">PARTY WEAR</p>
+            <h3>Celebration Wear</h3>
+            <div class="product-bottom"><strong>₹1,599</strong><button class="enquire-button" type="button" data-enquire="Celebration Wear">Enquire ↗</button></div>
+          </div>
         </article>
       </div>
 
-      <p class="note">
-        These are sample collection cards. Actual product photos and prices
-        will be added when the product catalogue is ready.
+      <p class="demo-note">
+        Sample products and prices for design preview only. Replace these
+        with actual shop inventory before advertising them to customers.
       </p>
     </section>
 
-    <section class="visit" id="visit">
-      <div class="section-heading">
-        <p>We Welcome You</p>
-        <h2>Visit Our Store</h2>
+    <section class="visit-section" id="visit">
+      <div>
+        <p class="eyebrow">COME SAY HELLO</p>
+        <h2>Your next favourite<br><em>look awaits.</em></h2>
+        <p>Visit Sakshi Suit Collection and explore our collection in person.</p>
       </div>
-
-      <p><strong>Sakshi Suit Collection</strong></p>
-      <p>
-        Choodi Market, Hazira Chauraha<br>
-        Gwalior, Madhya Pradesh
-      </p>
-
-      <a
-        class="btn"
-        href="https://maps.app.goo.gl/d5s7GqEFMQUpjRfZ8"
-        target="_blank"
-        rel="noopener noreferrer"
-      >GET DIRECTIONS</a>
+      <div class="visit-details">
+        <h3>Sakshi Suit Collection</h3>
+        <p>Choodi Market, Hazira Chauraha<br>Gwalior, Madhya Pradesh</p>
+        <a class="primary-button" href="https://maps.app.goo.gl/d5s7GqEFMQUpjRfZ8" target="_blank" rel="noopener noreferrer">GET DIRECTIONS ↗</a>
+      </div>
     </section>
   </main>
 
   <footer>
-    <p>
-      © <span data-current-year>2026</span>
-      Sakshi Suit Collection. All rights reserved.
-    </p>
-    <p>Made with care for your style.</p>
+    <a class="brand footer-brand" href="#home">
+      <span class="brand-name">Sakshi</span>
+      <span class="brand-subtitle">SUIT COLLECTION</span>
+    </a>
+    <p>Elegance in every thread.</p>
+    <p>© <span data-current-year>2026</span> Sakshi Suit Collection</p>
   </footer>
+
+  <aside id="favorites-panel" class="favorites-panel" hidden aria-label="Saved favourites">
+    <div class="favorites-header">
+      <h2>Your Favourites</h2>
+      <button id="close-favorites" type="button" aria-label="Close favourites">✕</button>
+    </div>
+    <div id="favorites-list"></div>
+  </aside>
+
+  <div id="site-message" class="site-message" role="status" aria-live="polite"></div>
 
   <script src="app.js"></script>
 </body>
