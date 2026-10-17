@@ -1,0 +1,276 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#4b1837">
+  <title>Admin Dashboard | Sakshi Suit Collection</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background:#f8f2eb; padding:20px; color:#30242c; }
+    .dashboard { max-width:1050px; margin:0 auto; }
+    .panel { background:#fffdf9; border:1px solid #ead9cc; border-radius:14px; padding:22px; margin:20px 0; }
+    h1,h2 { color:#4b1837; }
+    label { display:block; font-weight:600; margin:12px 0 6px; }
+    input,textarea,select { width:100%; box-sizing:border-box; padding:11px; border:1px solid #d9c7bc; border-radius:7px; font:inherit; background:white; }
+    textarea { min-height:85px; }
+    button,.button { background:#4b1837; color:white; border:0; border-radius:7px; padding:11px 15px; cursor:pointer; font:inherit; text-decoration:none; display:inline-block; margin:5px 4px 5px 0; }
+    button:disabled { opacity:.6; cursor:wait; }
+    .secondary { background:#79616e; }
+    .danger { background:#a52e42; }
+    .product-row { border-top:1px solid #ead9cc; padding:15px 0; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+    .muted { color:#6f625e; }
+    #status { white-space:pre-wrap; overflow-wrap:anywhere; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
+    .check { display:flex; align-items:center; gap:8px; }
+    .check input { width:auto; }
+  </style>
+</head>
+<body>
+<main class="dashboard">
+  <p><a href="/">← View Store</a></p>
+  <h1>Store Admin Dashboard</h1>
+  <p class="muted">Manage your Sakshi Suit Collection products.</p>
+
+  <p id="status" role="status" aria-live="polite"></p>
+
+  <section class="panel" id="editor">
+    <h2 id="form-heading">Add New Product</h2>
+
+    <form id="product-form">
+      <input type="hidden" id="product-id">
+
+      <div class="grid">
+        <div>
+          <label for="name">Product name *</label>
+          <input id="name" maxlength="200" required>
+        </div>
+        <div>
+          <label for="price">Price in ₹ *</label>
+          <input id="price" type="number" min="0" step="0.01" required>
+        </div>
+        <div>
+          <label for="category">Category *</label>
+          <select id="category" required>
+            <option value="Suits">Suits</option>
+            <option value="Kurtis">Kurtis</option>
+            <option value="Gowns">Gowns</option>
+            <option value="Party Wear">Party Wear</option>
+          </select>
+        </div>
+      </div>
+
+      <label for="description">Description</label>
+      <textarea id="description" maxlength="5000"></textarea>
+
+      <label for="image-url">Product image URL (HTTPS recommended)</label>
+      <input id="image-url" type="url" maxlength="2000" placeholder="https://...">
+
+      <label class="check">
+        <input id="is-active" type="checkbox" checked>
+        Show this product on the store
+      </label>
+
+      <button id="save-button" type="submit">Save Product</button>
+      <button class="secondary" id="cancel-button" type="button" hidden>Cancel Edit</button>
+    </form>
+  </section>
+
+  <section class="panel">
+    <h2>Products</h2>
+    <button class="secondary" id="refresh-button" type="button">Refresh Products</button>
+    <div id="product-list"><p>Loading products...</p></div>
+  </section>
+
+  <button class="danger" id="logout-button" type="button">Logout</button>
+</main>
+
+<script>
+const statusEl = document.querySelector("#status");
+const listEl = document.querySelector("#product-list");
+const form = document.querySelector("#product-form");
+const saveButton = document.querySelector("#save-button");
+
+let products = [];
+
+async function api(url, options = {}) {
+  const response = await fetch(url, {
+    credentials: "same-origin",
+    ...options,
+    headers: {
+      ...(options.body ? { "Content-Type": "application/json" } : {}),
+      ...(options.headers || {})
+    }
+  });
+
+  const result = await response.json().catch(() => ({}));
+
+  if (response.status === 401) {
+    window.location.replace("/admin.html");
+    throw new Error("Please log in again.");
+  }
+
+  if (!response.ok) {
+    throw new Error(result.error || "Request failed.");
+  }
+
+  return result;
+}
+
+function showStatus(message) {
+  statusEl.textContent = message;
+}
+
+function addText(parent, tag, text, className) {
+  const element = document.createElement(tag);
+  element.textContent = text;
+  if (className) element.className = className;
+  parent.appendChild(element);
+  return element;
+}
+
+function resetForm() {
+  form.reset();
+  document.querySelector("#product-id").value = "";
+  document.querySelector("#form-heading").textContent = "Add New Product";
+  document.querySelector("#save-button").textContent = "Save Product";
+  document.querySelector("#cancel-button").hidden = true;
+  document.querySelector("#is-active").checked = true;
+}
+
+function editProduct(product) {
+  document.querySelector("#product-id").value = product.id;
+  document.querySelector("#name").value = product.name || "";
+  document.querySelector("#price").value = product.price ?? "";
+  document.querySelector("#category").value = product.category || "Suits";
+  document.querySelector("#description").value = product.description || "";
+  document.querySelector("#image-url").value = product.image_url || "";
+  document.querySelector("#is-active").checked = product.is_active !== false;
+  document.querySelector("#form-heading").textContent = "Edit Product";
+  document.querySelector("#save-button").textContent = "Update Product";
+  document.querySelector("#cancel-button").hidden = false;
+  document.querySelector("#editor").scrollIntoView({ behavior: "smooth" });
+}
+
+function renderProducts() {
+  listEl.replaceChildren();
+
+  if (!products.length) {
+    addText(listEl, "p", "No products found. Add your first product above.");
+    return;
+  }
+
+  products.forEach(product => {
+    const row = document.createElement("article");
+    row.className = "product-row";
+
+    const details = document.createElement("div");
+    addText(details, "h3", product.name || "Unnamed product");
+    addText(details, "p", `₹${product.price} · ${product.category || "Uncategorized"}`);
+    addText(details, "p", product.is_active ? "Visible on store" : "Hidden from store", "muted");
+
+    const actions = document.createElement("div");
+
+    const editButton = document.createElement("button");
+    editButton.type = "button";
+    editButton.textContent = "Edit";
+    editButton.addEventListener("click", () => editProduct(product));
+
+    const deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.textContent = "Delete";
+    deleteButton.className = "danger";
+    deleteButton.addEventListener("click", async () => {
+      if (!confirm(`Delete "${product.name}"? This cannot be undone.`)) return;
+
+      deleteButton.disabled = true;
+      try {
+        await api(`/api/admin/products/${encodeURIComponent(product.id)}`, {
+          method: "DELETE"
+        });
+        showStatus("Product deleted.");
+        await loadProducts();
+      } catch (error) {
+        showStatus(error.message);
+        deleteButton.disabled = false;
+      }
+    });
+
+    actions.append(editButton, deleteButton);
+    row.append(details, actions);
+    listEl.appendChild(row);
+  });
+}
+
+async function loadProducts() {
+  listEl.textContent = "Loading products...";
+  try {
+    products = await api("/api/admin/products");
+    renderProducts();
+  } catch (error) {
+    listEl.textContent = error.message;
+    throw error;
+  }
+}
+
+form.addEventListener("submit", async event => {
+  event.preventDefault();
+  saveButton.disabled = true;
+
+  const id = document.querySelector("#product-id").value;
+  const product = {
+    name: document.querySelector("#name").value.trim(),
+    price: Number(document.querySelector("#price").value),
+    category: document.querySelector("#category").value,
+    description: document.querySelector("#description").value,
+    image_url: document.querySelector("#image-url").value.trim(),
+    is_active: document.querySelector("#is-active").checked
+  };
+
+  try {
+    await api(
+      id
+        ? `/api/admin/products/${encodeURIComponent(id)}`
+        : "/api/admin/products",
+      {
+        method: id ? "PATCH" : "POST",
+        body: JSON.stringify(product)
+      }
+    );
+
+    showStatus(id ? "Product updated." : "Product added.");
+    resetForm();
+    await loadProducts();
+  } catch (error) {
+    showStatus(error.message);
+  } finally {
+    saveButton.disabled = false;
+  }
+});
+
+document.querySelector("#cancel-button").addEventListener("click", resetForm);
+document.querySelector("#refresh-button").addEventListener("click", () => {
+  loadProducts().catch(() => {});
+});
+
+document.querySelector("#logout-button").addEventListener("click", async () => {
+  try {
+    await api("/api/admin/logout", { method: "POST" });
+    window.location.replace("/admin.html");
+  } catch (error) {
+    showStatus(error.message);
+  }
+});
+
+(async () => {
+  try {
+    await api("/api/admin/check");
+    await loadProducts();
+  } catch (error) {
+    showStatus(error.message);
+  }
+})();
+</script>
+</body>
+</html>
