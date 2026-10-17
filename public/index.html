@@ -5,120 +5,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Discover elegant suits, kurtis, gowns and party wear at Sakshi Suit Collection, Gwalior.">
+  <meta name="theme-color" content="#511c39">
   <title>Sakshi Suit Collection | Elegance in Every Thread</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: Georgia, "Times New Roman", serif;
-      background: #fffaf4;
-      color: #351827;
-    }
-    header {
-      background: #511c39;
-      color: #fffaf4;
-      padding: 20px 7%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-    .brand { font-size: 25px; font-weight: bold; }
-    .brand span { color: #e6c17b; }
-    nav { display: flex; gap: 22px; flex-wrap: wrap; }
-    nav a { color: #fffaf4; text-decoration: none; font-size: 14px; }
-    nav a:hover { color: #e6c17b; }
-    .hero {
-      min-height: 470px;
-      padding: 75px 8%;
-      display: flex;
-      align-items: center;
-      background: linear-gradient(115deg, #f8e9dc, #fffaf4 65%);
-    }
-    .hero-content { max-width: 650px; }
-    .eyebrow {
-      color: #98652e;
-      text-transform: uppercase;
-      letter-spacing: 4px;
-      font: bold 12px Arial, sans-serif;
-    }
-    h1 { font-size: clamp(42px, 7vw, 76px); line-height: 1.08; margin: 20px 0; }
-    h1 span { color: #8a3457; font-style: italic; }
-    .hero p { font: 16px/1.8 Arial, sans-serif; color: #715c64; max-width: 490px; }
-    .btn {
-      display: inline-block;
-      margin-top: 28px;
-      padding: 14px 25px;
-      background: #702847;
-      color: white;
-      text-decoration: none;
-      border: 1px solid #702847;
-      font: bold 13px Arial, sans-serif;
-      letter-spacing: 1px;
-    }
-    .btn:hover { background: #4b1932; }
-    section { padding: 65px 7%; }
-    .section-heading { text-align: center; margin-bottom: 35px; }
-    .section-heading p {
-      color: #98652e; font: bold 11px Arial, sans-serif;
-      letter-spacing: 3px; text-transform: uppercase;
-    }
-    h2 { font-size: clamp(30px, 4vw, 42px); margin-top: 10px; }
-    .categories {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px;
-    }
-    .category {
-      padding: 30px 12px; text-align: center;
-      background: #f4e5da; border-bottom: 3px solid #c49a57;
-    }
-    .category .symbol { font-size: 34px; margin-bottom: 12px; }
-    .category h3 { font-size: 19px; }
-    .category p { font: 12px Arial, sans-serif; color: #806a71; margin-top: 8px; }
-    .collection { background: #f7eee7; }
-    .products {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
-    }
-    .product {
-      background: #fffaf4; padding-bottom: 20px;
-      text-align: center; border: 1px solid #ead9ca;
-    }
-    .product-art {
-      height: 210px; display: flex; align-items: center;
-      justify-content: center; font-size: 70px;
-      background: linear-gradient(145deg, #ead2c5, #f8eee5);
-    }
-    .product h3 { font-size: 20px; margin: 18px 10px 8px; }
-    .product p { font: 13px Arial, sans-serif; color: #806a71; padding: 0 12px; }
-    .note {
-      font: 13px/1.8 Arial, sans-serif; text-align: center;
-      color: #806a71; margin-top: 28px;
-    }
-    .visit { text-align: center; }
-    .visit p { font: 15px/1.9 Arial, sans-serif; color: #715c64; margin-top: 14px; }
-    footer {
-      padding: 28px 7%; text-align: center;
-      background: #351827; color: #f9eedd;
-      font: 12px/1.8 Arial, sans-serif;
-    }
-    footer a { color: #e6c17b; }
-    @media (max-width: 700px) {
-      header { padding: 18px 5%; }
-      .brand { font-size: 21px; }
-      nav { gap: 13px; }
-      nav a { font-size: 12px; }
-      .hero { padding: 65px 6%; min-height: 400px; }
-      section { padding: 48px 5%; }
-      .categories { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-      .products { grid-template-columns: 1fr; }
-      .product-art { height: 190px; }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <div class="brand">Sakshi <span>Suit Collection</span></div>
-    <nav>
+    <a class="brand" href="#home" aria-label="Sakshi Suit Collection Home">
+      Sakshi <span>Suit Collection</span>
+    </a>
+
+    <nav aria-label="Main navigation">
       <a href="#home">Home</a>
       <a href="#categories">Collections</a>
       <a href="#collection">Featured</a>
@@ -131,7 +28,11 @@
       <div class="hero-content">
         <div class="eyebrow">Tradition • Grace • Elegance</div>
         <h1>Elegance in <span>Every Thread.</span></h1>
-        <p>Discover beautiful ethnic wear for every occasion. From timeless suits to graceful kurtis and stunning gowns, find a style that feels uniquely yours.</p>
+        <p>
+          Discover beautiful ethnic wear for every occasion.
+          From timeless suits to graceful kurtis and stunning gowns,
+          find a style that feels uniquely yours.
+        </p>
         <a class="btn" href="#collection">EXPLORE COLLECTION</a>
       </div>
     </section>
@@ -141,11 +42,31 @@
         <p>Find Your Style</p>
         <h2>Our Collections</h2>
       </div>
+
       <div class="categories">
-        <div class="category"><div class="symbol">✿</div><h3>Elegant Suits</h3><p>Classic ethnic styles</p></div>
-        <div class="category"><div class="symbol">❀</div><h3>Kurtis</h3><p>Everyday elegance</p></div>
-        <div class="category"><div class="symbol">♕</div><h3>Gowns</h3><p>Make every moment special</p></div>
-        <div class="category"><div class="symbol">✧</div><h3>Party Wear</h3><p>Celebrate in style</p></div>
+        <article class="category">
+          <div class="symbol" aria-hidden="true">✿</div>
+          <h3>Elegant Suits</h3>
+          <p>Classic ethnic styles</p>
+        </article>
+
+        <article class="category">
+          <div class="symbol" aria-hidden="true">❀</div>
+          <h3>Kurtis</h3>
+          <p>Everyday elegance</p>
+        </article>
+
+        <article class="category">
+          <div class="symbol" aria-hidden="true">♕</div>
+          <h3>Gowns</h3>
+          <p>Make every moment special</p>
+        </article>
+
+        <article class="category">
+          <div class="symbol" aria-hidden="true">✧</div>
+          <h3>Party Wear</h3>
+          <p>Celebrate in style</p>
+        </article>
       </div>
     </section>
 
@@ -154,24 +75,31 @@
         <p>Handpicked For You</p>
         <h2>Featured Collection</h2>
       </div>
+
       <div class="products">
         <article class="product">
-          <div class="product-art">🌸</div>
+          <div class="product-art" aria-hidden="true">🌸</div>
           <h3>Traditional Suits</h3>
           <p>Beautiful designs for everyday wear and celebrations.</p>
         </article>
+
         <article class="product">
-          <div class="product-art">🌷</div>
+          <div class="product-art" aria-hidden="true">🌷</div>
           <h3>Graceful Kurtis</h3>
           <p>Effortless styles that bring comfort and elegance together.</p>
         </article>
+
         <article class="product">
-          <div class="product-art">✨</div>
+          <div class="product-art" aria-hidden="true">✨</div>
           <h3>Statement Gowns</h3>
           <p>Find a special look for your memorable occasions.</p>
         </article>
       </div>
-      <p class="note">These are introductory collection cards. Actual product photos and prices will be added in the next steps.</p>
+
+      <p class="note">
+        These are sample collection cards. Actual product photos and prices
+        will be added when the product catalogue is ready.
+      </p>
     </section>
 
     <section class="visit" id="visit">
@@ -179,16 +107,31 @@
         <p>We Welcome You</p>
         <h2>Visit Our Store</h2>
       </div>
+
       <p><strong>Sakshi Suit Collection</strong></p>
-      <p>Choodi Market, Hazira Chauraha<br>Gwalior, Madhya Pradesh</p>
-      <a class="btn" href="https://maps.app.goo.gl/d5s7GqEFMQUpjRfZ8" target="_blank" rel="noopener noreferrer">GET DIRECTIONS</a>
+      <p>
+        Choodi Market, Hazira Chauraha<br>
+        Gwalior, Madhya Pradesh
+      </p>
+
+      <a
+        class="btn"
+        href="https://maps.app.goo.gl/d5s7GqEFMQUpjRfZ8"
+        target="_blank"
+        rel="noopener noreferrer"
+      >GET DIRECTIONS</a>
     </section>
   </main>
 
   <footer>
-    <p>© 2026 Sakshi Suit Collection. All rights reserved.</p>
+    <p>
+      © <span data-current-year>2026</span>
+      Sakshi Suit Collection. All rights reserved.
+    </p>
     <p>Made with care for your style.</p>
   </footer>
+
+  <script src="app.js"></script>
 </body>
 </html>
 ```
