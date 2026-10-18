@@ -48,6 +48,7 @@ function getProductData(card) {
   };
 }
 
+
 function createProductCard(product) {
   const card = document.createElement("article");
   card.className = "product-card";
@@ -55,22 +56,61 @@ function createProductCard(product) {
   card.dataset.name = product.name || "Fashion Collection";
   card.dataset.price = String(product.price ?? 0);
   card.dataset.category = product.category || "";
+  card.style.cursor = "pointer";
+  card.setAttribute("role", "link");
+  card.setAttribute("tabindex", "0");
+  card.setAttribute(
+    "aria-label",
+    `View details for ${product.name || "Fashion Collection"}`
+  );
+
+  // Clicking the card opens its product details page.
+  function openProductPage() {
+    if (product.id === undefined || product.id === null || product.id === "") {
+      showMessage("Is product ki ID nahi mili. Admin panel mein product check karein.");
+      return;
+    }
+
+    window.location.href =
+      "/product.html?id=" + encodeURIComponent(String(product.id));
+  }
+
+  card.addEventListener("click", event => {
+    // Favourite and enquiry buttons should keep their own actions.
+    if (event.target.closest("button")) return;
+    openProductPage();
+  });
+
+  card.addEventListener("keydown", event => {
+    if (
+      event.target === card &&
+      (event.key === "Enter" || event.key === " ")
+    ) {
+      event.preventDefault();
+      openProductPage();
+    }
+  });
 
   const imageBox = document.createElement("div");
   imageBox.className = "product-image";
 
-  if (product.image_url) {
+  const imageUrl = product.image_url;
+
+  if (imageUrl) {
     const image = document.createElement("img");
-    image.src = product.image_url;
+    image.src = imageUrl;
     image.alt = product.name || "Fashion product";
     image.loading = "lazy";
+
     image.onerror = () => {
       image.remove();
       imageBox.classList.add("image-unavailable");
     };
+
     imageBox.appendChild(image);
   } else {
     imageBox.classList.add("image-unavailable");
+
     const placeholder = document.createElement("span");
     placeholder.textContent = "Sakshi Suit Collection";
     imageBox.appendChild(placeholder);
@@ -82,14 +122,18 @@ function createProductCard(product) {
   fav.textContent = "♡";
   fav.setAttribute("aria-label", "Toggle favourite");
   fav.setAttribute("aria-pressed", "false");
+
   fav.addEventListener("click", () => {
     const id = getProductData(card).id;
+
     favorites = favorites.includes(id)
       ? favorites.filter(item => item !== id)
       : [...favorites, id];
+
     saveFavorites();
     renderFavorites();
   });
+
   imageBox.appendChild(fav);
 
   const info = document.createElement("div");
@@ -97,7 +141,8 @@ function createProductCard(product) {
 
   const category = document.createElement("p");
   category.className = "product-category";
-  category.textContent = (product.category || "Collection").toUpperCase();
+  category.textContent =
+    (product.category || "Collection").toUpperCase();
 
   const name = document.createElement("h3");
   name.textContent = product.name || "Fashion Collection";
@@ -112,13 +157,19 @@ function createProductCard(product) {
   enquire.type = "button";
   enquire.className = "enquire-button";
   enquire.textContent = "Enquire ↗";
+
   enquire.addEventListener("click", () => {
     if (!/^\d{10,15}$/.test(WHATSAPP_NUMBER)) {
-      showMessage("WhatsApp enquiry ke liye app.js mein shop ka WhatsApp number add karna hoga.");
+      showMessage(
+        "WhatsApp enquiry ke liye app.js mein shop ka WhatsApp number add karna hoga."
+      );
       return;
     }
 
-    const message = `Namaste! Mujhe ${product.name} ke baare mein jaankari chahiye. Listed price: ₹${money(product.price)}.`;
+    const message =
+      `Namaste! Mujhe ${product.name} ke baare mein jaankari chahiye. ` +
+      `Listed price: ₹${money(product.price)}.`;
+
     window.open(
       `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`,
       "_blank",
@@ -129,6 +180,7 @@ function createProductCard(product) {
   bottom.append(price, enquire);
   info.append(category, name, bottom);
   card.append(imageBox, info);
+
   return card;
 }
 
