@@ -16,8 +16,10 @@ let activeCategory = "all";
 let favorites = [];
 
 try {
-  favorites = JSON.parse(localStorage.getItem("sakshi-favorites-v1") || "[]");
-  if (!Array.isArray(favorites)) favorites = [];
+  const saved = JSON.parse(
+    localStorage.getItem("sakshi-favorites-v1") || "[]"
+  );
+  favorites = Array.isArray(saved) ? saved.map(String) : [];
 } catch {
   favorites = [];
 }
@@ -32,7 +34,17 @@ function showMessage(message) {
 }
 
 function saveFavorites() {
-  localStorage.setItem("sakshi-favorites-v1", JSON.stringify(favorites));
+  try {
+    localStorage.setItem(
+      "sakshi-favorites-v1",
+      JSON.stringify(favorites)
+    );
+    return true;
+  } catch (error) {
+    console.error("Could not save favourites:", error);
+    showMessage("Favourites save nahi ho pa rahe. Browser storage check karein.");
+    return false;
+  }
 }
 
 function money(value) {
@@ -48,6 +60,9 @@ function getProductData(card) {
   };
 }
 
+function productPageUrl(product) {
+  return "/product.html?id=" + encodeURIComponent(String(product.id));
+}
 
 function createProductCard(product) {
   const card = document.createElement("article");
@@ -57,97 +72,75 @@ function createProductCard(product) {
   card.dataset.price = String(product.price ?? 0);
   card.dataset.category = product.category || "";
   card.style.cursor = "pointer";
-  card.setAttribute("role", "link");
-  card.setAttribute("tabindex", "0");
-  card.setAttribute(
-    "aria-label",
-    `View details for ${product.name || "Fashion Collection"}`
-  );
 
-  // Clicking the card opens its product details page.
-  function openProductPage() {
-    if (product.id === undefined || product.id === null || product.id === "") {
-      showMessage("Is product ki ID nahi mili. Admin panel mein product check karein.");
+  // Clicking the card opens its detail page.
+  card.addEventListener("click", event => {
+    if (event.target.closest("button, a")) return;
+
+    if (product.id === undefined || product.id === null) {
+      showMessage("Product ID nahi mili.");
       return;
     }
 
-    window.location.href =
-      "/product.html?id=" + encodeURIComponent(String(product.id));
-  }
-
-  card.addEventListener("click", event => {
-    // Favourite and enquiry buttons should keep their own actions.
-    if (event.target.closest("button")) return;
-    openProductPage();
-  });
-
-  card.addEventListener("keydown", event => {
-    if (
-      event.target === card &&
-      (event.key === "Enter" || event.key === " ")
-    ) {
-      event.preventDefault();
-      openProductPage();
-    }
+    window.location.href = productPageUrl(product);
   });
 
   const imageBox = document.createElement("div");
   imageBox.className = "product-image";
 
-  const imageUrl = product.image_url;
-
-  if (imageUrl) {
+  if (product.image_url) {
     const image = document.createElement("img");
-    image.src = imageUrl;
+    image.src = product.image_url;
     image.alt = product.name || "Fashion product";
     image.loading = "lazy";
-
     image.onerror = () => {
       image.remove();
       imageBox.classList.add("image-unavailable");
     };
-
     imageBox.appendChild(image);
   } else {
     imageBox.classList.add("image-unavailable");
-
     const placeholder = document.createElement("span");
     placeholder.textContent = "Sakshi Suit Collection";
     imageBox.appendChild(placeholder);
   }
 
+  // Favourite heart button
   const fav = document.createElement("button");
   fav.type = "button";
   fav.className = "favorite-toggle";
-  fav.textContent = "♡";
   fav.setAttribute("aria-label", "Toggle favourite");
-  fav.setAttribute("aria-pressed", "false");
 
-  
-fav.addEventListener("click", (event) => {
-  event.preventDefault();
-  event.stopPropagation();
-
-  const id = String(product.id);
-
-  if (!id || id === "undefined" || id === "null") {
-    showMessage("Product ID nahi mili. Product ko check karein.");
-    return;
+  function updateHeart() {
+    const isSaved = favorites.includes(String(product.id));
+    fav.textContent = isSaved ? "♥" : "♡";
+    fav.setAttribute("aria-pressed", String(isSaved));
+    fav.classList.toggle("is-favorite", isSaved);
   }
 
-  if (favorites.includes(id)) {
-    favorites = favorites.filter(item => item !== id);
-  } else {
-    favorites.push(id);
-  }
+  updateHeart();
 
-  fav.textContent = favorites.includes(id) ? "♥" : "♡";
-  fav.classList.toggle("is-favorite", favorites.includes(id));
-  fav.setAttribute("aria-pressed", String(favorites.includes(id)));
+  fav.addEventListener("click", event => {
+    event.preventDefault();
+    event.stopPropagation();
 
-  saveFavorites();
-  renderFavorites();
-});
+    const id = String(product.id);
+
+    if (id === "undefined" || id === "null" || id === "") {
+      showMessage("Product ID nahi mili.");
+      return;
+    }
+
+    if (favorites.includes(id)) {
+      favorites = favorites.filter(item => item !== id);
+    } else {
+      favorites.push(id);
+    }
+
+    saveFavorites();
+    updateHeart();
+    renderFavorites();
+  });
 
   imageBox.appendChild(fav);
 
@@ -156,8 +149,7 @@ fav.addEventListener("click", (event) => {
 
   const category = document.createElement("p");
   category.className = "product-category";
-  category.textContent =
-    (product.category || "Collection").toUpperCase();
+  category.textContent = (product.category || "Collection").toUpperCase();
 
   const name = document.createElement("h3");
   name.textContent = product.name || "Fashion Collection";
@@ -173,7 +165,10 @@ fav.addEventListener("click", (event) => {
   enquire.className = "enquire-button";
   enquire.textContent = "Enquire ↗";
 
-  enquire.addEventListener("click", () => {
+  enquire.addEventListener("click", event => {
+    event.preventDefault();
+    event.stopPropagation();
+
     if (!/^\d{10,15}$/.test(WHATSAPP_NUMBER)) {
       showMessage(
         "WhatsApp enquiry ke liye app.js mein shop ka WhatsApp number add karna hoga."
@@ -207,12 +202,17 @@ function renderProducts() {
   if (!products.length) {
     const empty = document.createElement("p");
     empty.className = "empty-products";
-    empty.textContent = "Abhi collection update ho rahi hai. Kripya baad mein dobara dekhein.";
+    empty.textContent =
+      "Abhi collection update ho rahi hai. Kripya baad mein dobara dekhein.";
     grid.appendChild(empty);
+    renderFavorites();
     return;
   }
 
-  products.forEach(product => grid.appendChild(createProductCard(product)));
+  products.forEach(product => {
+    grid.appendChild(createProductCard(product));
+  });
+
   filterProducts();
   renderFavorites();
 }
@@ -222,6 +222,7 @@ function filterProducts() {
 
   document.querySelectorAll("#product-grid .product-card").forEach(card => {
     const product = getProductData(card);
+
     const matchesCategory =
       activeCategory === "all" ||
       product.category.trim().toLowerCase() === activeCategory;
@@ -233,22 +234,20 @@ function filterProducts() {
   });
 }
 
-
 function renderFavorites() {
   if (favoritesCount) {
     favoritesCount.textContent = favorites.length;
   }
 
-  // Update heart buttons on product cards.
+  // Keep hearts synchronised with the saved list.
   document.querySelectorAll("#product-grid .favorite-toggle").forEach(button => {
     const card = button.closest(".product-card");
     if (!card) return;
 
-    const isFavorite = favorites.includes(getProductData(card).id);
-
-    button.setAttribute("aria-pressed", String(isFavorite));
-    button.classList.toggle("is-favorite", isFavorite);
-    button.textContent = isFavorite ? "♥" : "♡";
+    const isSaved = favorites.includes(getProductData(card).id);
+    button.textContent = isSaved ? "♥" : "♡";
+    button.setAttribute("aria-pressed", String(isSaved));
+    button.classList.toggle("is-favorite", isSaved);
   });
 
   if (!favoritesList) return;
@@ -274,14 +273,20 @@ function renderFavorites() {
 
     const imageLink = document.createElement("a");
     imageLink.className = "favorite-image-link";
-    imageLink.href =
-      "/product.html?id=" + encodeURIComponent(String(product.id));
+    imageLink.href = productPageUrl(product);
 
     const image = document.createElement("img");
     image.className = "favorite-image";
-    image.src = product.image_url || "";
     image.alt = product.name || "Favourite product";
     image.loading = "lazy";
+
+    if (product.image_url) {
+      image.src = product.image_url;
+    } else {
+      image.style.display = "none";
+      imageLink.classList.add("favorite-image-placeholder");
+      imageLink.textContent = "Sakshi Suit Collection";
+    }
 
     image.onerror = () => {
       image.onerror = null;
@@ -305,8 +310,7 @@ function renderFavorites() {
 
     const view = document.createElement("a");
     view.className = "favorite-view";
-    view.href =
-      "/product.html?id=" + encodeURIComponent(String(product.id));
+    view.href = productPageUrl(product);
     view.textContent = "View Product →";
 
     details.append(name, price, view);
@@ -315,15 +319,15 @@ function renderFavorites() {
     remove.type = "button";
     remove.className = "favorite-remove";
     remove.textContent = "♥ Remove";
-    remove.setAttribute(
-      "aria-label",
-      `Remove ${product.name || "product"} from favourites`
-    );
 
-    remove.addEventListener("click", () => {
+    remove.addEventListener("click", event => {
+      event.preventDefault();
+      event.stopPropagation();
+
       favorites = favorites.filter(
         id => id !== String(product.id)
       );
+
       saveFavorites();
       renderFavorites();
     });
@@ -333,49 +337,40 @@ function renderFavorites() {
   });
 }
 
-  savedProducts.forEach(product => {
-    const item = document.createElement("div");
-    item.className = "favorite-item";
-
-    const details = document.createElement("span");
-    details.textContent = `${product.name} — ₹${money(product.price)}`;
-
-    const remove = document.createElement("button");
-    remove.type = "button";
-    remove.textContent = "Remove";
-    remove.addEventListener("click", () => {
-      favorites = favorites.filter(id => id !== String(product.id));
-      saveFavorites();
-      renderFavorites();
-    });
-
-    item.append(details, remove);
-    favoritesList.appendChild(item);
-  });
-}
-
 async function loadProducts() {
   if (!grid) return;
 
   grid.replaceChildren();
+
   const loading = document.createElement("p");
   loading.textContent = "Collection load ho rahi hai...";
   grid.appendChild(loading);
 
   try {
-    const response = await fetch("/api/products", { cache: "no-store" });
-    if (!response.ok) throw new Error(`Products request failed (${response.status})`);
+    const response = await fetch("/api/products", {
+      cache: "no-store"
+    });
+
+    if (!response.ok) {
+      throw new Error(`Products request failed (${response.status})`);
+    }
 
     const data = await response.json();
-    if (!Array.isArray(data)) throw new Error("Invalid products response");
+
+    if (!Array.isArray(data)) {
+      throw new Error("Invalid products response");
+    }
 
     products = data;
     renderProducts();
   } catch (error) {
     console.error("Product loading failed:", error);
     grid.replaceChildren();
+
     const message = document.createElement("p");
-    message.textContent = "Products load nahi ho paaye. Page refresh karke dobara try karein.";
+    message.textContent =
+      "Products load nahi ho paaye. Page refresh karke dobara try karein.";
+
     grid.appendChild(message);
   }
 }
@@ -389,32 +384,49 @@ filterButtons.forEach(button => {
 
     const value = (button.dataset.filter || "all").trim().toLowerCase();
     activeCategory = value === "all" ? "all" : value;
+
     filterProducts();
   });
 });
 
-favoritesButton?.addEventListener("click", () => {
-  if (favoritesPanel) favoritesPanel.hidden = false;
+favoritesButton?.addEventListener("click", event => {
+  event.preventDefault();
+
+  if (favoritesPanel) {
+    favoritesPanel.hidden = false;
+    favoritesPanel.removeAttribute("hidden");
+  }
+
   renderFavorites();
 });
 
-closeFavorites?.addEventListener("click", () => {
-  if (favoritesPanel) favoritesPanel.hidden = true;
+closeFavorites?.addEventListener("click", event => {
+  event.preventDefault();
+
+  if (favoritesPanel) {
+    favoritesPanel.hidden = true;
+  }
 });
 
 document.querySelectorAll(".category-card").forEach(card => {
   card.addEventListener("click", () => {
     const category = (card.dataset.category || "").trim().toLowerCase();
+
     const button = [...filterButtons].find(
       item => (item.dataset.filter || "").trim().toLowerCase() === category
     );
 
     button?.click();
-    document.querySelector("#products")?.scrollIntoView({ behavior: "smooth" });
+
+    document.querySelector("#products")?.scrollIntoView({
+      behavior: "smooth"
+    });
   });
 });
 
 const yearElement = document.querySelector("[data-current-year]");
-if (yearElement) yearElement.textContent = new Date().getFullYear();
+if (yearElement) {
+  yearElement.textContent = new Date().getFullYear();
+}
 
 loadProducts();
