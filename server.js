@@ -171,7 +171,7 @@ app.get("/api/admin/check", requireAdmin, (req, res) => {
 app.get("/api/products", async (req, res) => {
   const { data, error } = await supabase
     .from("products")
-    .select("id,name,description,price,category,image_url,is_active,created_at")
+    .select("id,name,description,price,category,image_url,image_urls,is_active,created_at")
     .eq("is_active", true)
     .order("created_at", { ascending: false });
 
