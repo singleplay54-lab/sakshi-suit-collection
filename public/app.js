@@ -218,20 +218,26 @@ function filterProducts() {
   });
 }
 
-function renderFavorites() {
-  if (favoritesCount) favoritesCount.textContent = favorites.length;
 
+function renderFavorites() {
+  if (favoritesCount) {
+    favoritesCount.textContent = favorites.length;
+  }
+
+  // Update heart buttons on product cards.
   document.querySelectorAll("#product-grid .favorite-toggle").forEach(button => {
     const card = button.closest(".product-card");
     if (!card) return;
 
     const isFavorite = favorites.includes(getProductData(card).id);
+
     button.setAttribute("aria-pressed", String(isFavorite));
     button.classList.toggle("is-favorite", isFavorite);
     button.textContent = isFavorite ? "♥" : "♡";
   });
 
   if (!favoritesList) return;
+
   favoritesList.replaceChildren();
 
   const savedProducts = products.filter(product =>
@@ -240,10 +246,77 @@ function renderFavorites() {
 
   if (!savedProducts.length) {
     const empty = document.createElement("p");
-    empty.textContent = "Abhi koi favourite product save nahi hai.";
+    empty.className = "favorites-empty";
+    empty.textContent =
+      "Abhi koi favourite nahi hai. Apne pasand ke products par ♡ dabao!";
     favoritesList.appendChild(empty);
     return;
   }
+
+  savedProducts.forEach(product => {
+    const item = document.createElement("article");
+    item.className = "favorite-item";
+
+    const imageLink = document.createElement("a");
+    imageLink.className = "favorite-image-link";
+    imageLink.href =
+      "/product.html?id=" + encodeURIComponent(String(product.id));
+
+    const image = document.createElement("img");
+    image.className = "favorite-image";
+    image.src = product.image_url || "";
+    image.alt = product.name || "Favourite product";
+    image.loading = "lazy";
+
+    image.onerror = () => {
+      image.onerror = null;
+      image.style.display = "none";
+      imageLink.classList.add("favorite-image-placeholder");
+      imageLink.textContent = "Sakshi Suit Collection";
+    };
+
+    imageLink.appendChild(image);
+
+    const details = document.createElement("div");
+    details.className = "favorite-details";
+
+    const name = document.createElement("h3");
+    name.className = "favorite-name";
+    name.textContent = product.name || "Fashion Collection";
+
+    const price = document.createElement("p");
+    price.className = "favorite-price";
+    price.textContent = `₹${money(product.price)}`;
+
+    const view = document.createElement("a");
+    view.className = "favorite-view";
+    view.href =
+      "/product.html?id=" + encodeURIComponent(String(product.id));
+    view.textContent = "View Product →";
+
+    details.append(name, price, view);
+
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "favorite-remove";
+    remove.textContent = "♥ Remove";
+    remove.setAttribute(
+      "aria-label",
+      `Remove ${product.name || "product"} from favourites`
+    );
+
+    remove.addEventListener("click", () => {
+      favorites = favorites.filter(
+        id => id !== String(product.id)
+      );
+      saveFavorites();
+      renderFavorites();
+    });
+
+    item.append(imageLink, details, remove);
+    favoritesList.appendChild(item);
+  });
+}
 
   savedProducts.forEach(product => {
     const item = document.createElement("div");
