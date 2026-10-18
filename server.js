@@ -197,6 +197,7 @@ app.get("/api/admin/products", requireAdmin, async (req, res) => {
   res.json(data);
 });
 
+
 function validateProduct(body) {
   if (
     !body ||
@@ -209,20 +210,61 @@ function validateProduct(body) {
     !Number.isFinite(Number(body.price)) ||
     Number(body.price) < 0 ||
     (body.description != null &&
-      (typeof body.description !== "string" || body.description.length > 5000)) ||
+      (typeof body.description !== "string" ||
+        body.description.length > 5000)) ||
     (body.image_url != null &&
-      (typeof body.image_url !== "string" || body.image_url.length > 2000))
+      (typeof body.image_url !== "string" ||
+        body.image_url.length > 2000)) ||
+    (body.image_urls != null && !Array.isArray(body.image_urls))
   ) {
     return null;
   }
 
-  if (body.image_url) {
+  const imageUrls = Array.isArray(body.image_urls)
+    ? body.image_urls
+    : [];
+
+  if (imageUrls.length > 4) return null;
+
+  const cleanUrls = [];
+
+  for (const value of imageUrls) {
+    if (typeof value !== "string" || value.length > 2000) {
+      return null;
+    }
+
+    const trimmed = value.trim();
+    if (!trimmed) continue;
+
     try {
-      const url = new URL(body.image_url);
-      if (url.protocol !== "https:" && url.protocol !== "http:") return null;
+      const url = new URL(trimmed);
+      if (url.protocol !== "https:" && url.protocol !== "http:") {
+        return null;
+      }
     } catch {
       return null;
     }
+
+    cleanUrls.push(trimmed);
+  }
+
+  const mainImage = typeof body.image_url === "string"
+    ? body.image_url.trim()
+    : "";
+
+  if (mainImage) {
+    try {
+      const url = new URL(mainImage);
+      if (url.protocol !== "https:" && url.protocol !== "http:") {
+        return null;
+      }
+    } catch {
+      return null;
+    }
+  }
+
+  if (mainImage && cleanUrls.length === 0) {
+    cleanUrls.push(mainImage);
   }
 
   return {
@@ -230,7 +272,8 @@ function validateProduct(body) {
     description: body.description || "",
     price: Number(body.price),
     category: body.category.trim(),
-    image_url: body.image_url || "",
+    image_url: cleanUrls[0] || mainImage || "",
+    image_urls: cleanUrls,
     is_active: body.is_active !== false
   };
 }
