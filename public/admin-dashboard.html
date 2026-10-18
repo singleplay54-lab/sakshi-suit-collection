@@ -25,6 +25,8 @@
     .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
     .check { display:flex; align-items:center; gap:8px; }
     .check input { width:auto; }
+    .photo-preview { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+    .photo-preview img { width:75px; height:95px; object-fit:cover; border-radius:6px; border:1px solid #ead9cc; }
   </style>
 </head>
 <body>
@@ -64,8 +66,22 @@
       <label for="description">Description</label>
       <textarea id="description" maxlength="5000"></textarea>
 
-      <label for="image-url">Product image URL (HTTPS recommended)</label>
+      <h3>Product Photos (up to 4)</h3>
+      <p class="muted">Image URL paste karo. Pehli photo main image hogi.</p>
+
+      <label for="image-url">Image 1 — Main photo</label>
       <input id="image-url" type="url" maxlength="2000" placeholder="https://...">
+
+      <label for="image-url-2">Image 2 — Back view</label>
+      <input id="image-url-2" type="url" maxlength="2000" placeholder="https://...">
+
+      <label for="image-url-3">Image 3 — Close-up</label>
+      <input id="image-url-3" type="url" maxlength="2000" placeholder="https://...">
+
+      <label for="image-url-4">Image 4 — Another view</label>
+      <input id="image-url-4" type="url" maxlength="2000" placeholder="https://...">
+
+      <div id="photo-preview" class="photo-preview"></div>
 
       <label class="check">
         <input id="is-active" type="checkbox" checked>
@@ -91,6 +107,7 @@ const statusEl = document.querySelector("#status");
 const listEl = document.querySelector("#product-list");
 const form = document.querySelector("#product-form");
 const saveButton = document.querySelector("#save-button");
+const photoFields = ["#image-url", "#image-url-2", "#image-url-3", "#image-url-4"];
 
 let products = [];
 
@@ -111,10 +128,7 @@ async function api(url, options = {}) {
     throw new Error("Please log in again.");
   }
 
-  if (!response.ok) {
-    throw new Error(result.error || "Request failed.");
-  }
-
+  if (!response.ok) throw new Error(result.error || "Request failed.");
   return result;
 }
 
@@ -130,13 +144,46 @@ function addText(parent, tag, text, className) {
   return element;
 }
 
+function getImageUrls(product) {
+  const urls = Array.isArray(product.image_urls)
+    ? product.image_urls.filter(url => typeof url === "string" && url.trim())
+    : [];
+
+  if (!urls.length && product.image_url) urls.push(product.image_url);
+  return urls.slice(0, 4);
+}
+
+function getFormImageUrls() {
+  return photoFields
+    .map(selector => document.querySelector(selector).value.trim())
+    .filter(Boolean);
+}
+
+function updatePhotoPreview() {
+  const preview = document.querySelector("#photo-preview");
+  preview.replaceChildren();
+
+  getFormImageUrls().forEach(url => {
+    const image = document.createElement("img");
+    image.src = url;
+    image.alt = "Product photo preview";
+    image.onerror = () => image.remove();
+    preview.appendChild(image);
+  });
+}
+
+photoFields.forEach(selector => {
+  document.querySelector(selector).addEventListener("input", updatePhotoPreview);
+});
+
 function resetForm() {
   form.reset();
   document.querySelector("#product-id").value = "";
   document.querySelector("#form-heading").textContent = "Add New Product";
-  document.querySelector("#save-button").textContent = "Save Product";
+  saveButton.textContent = "Save Product";
   document.querySelector("#cancel-button").hidden = true;
   document.querySelector("#is-active").checked = true;
+  document.querySelector("#photo-preview").replaceChildren();
 }
 
 function editProduct(product) {
@@ -145,10 +192,16 @@ function editProduct(product) {
   document.querySelector("#price").value = product.price ?? "";
   document.querySelector("#category").value = product.category || "Suits";
   document.querySelector("#description").value = product.description || "";
-  document.querySelector("#image-url").value = product.image_url || "";
   document.querySelector("#is-active").checked = product.is_active !== false;
+
+  const urls = getImageUrls(product);
+  photoFields.forEach((selector, index) => {
+    document.querySelector(selector).value = urls[index] || "";
+  });
+
+  updatePhotoPreview();
   document.querySelector("#form-heading").textContent = "Edit Product";
-  document.querySelector("#save-button").textContent = "Update Product";
+  saveButton.textContent = "Update Product";
   document.querySelector("#cancel-button").hidden = false;
   document.querySelector("#editor").scrollIntoView({ behavior: "smooth" });
 }
@@ -169,6 +222,25 @@ function renderProducts() {
     addText(details, "h3", product.name || "Unnamed product");
     addText(details, "p", `₹${product.price} · ${product.category || "Uncategorized"}`);
     addText(details, "p", product.is_active ? "Visible on store" : "Hidden from store", "muted");
+
+    const urls = getImageUrls(product);
+    addText(details, "p", `${urls.length} photo(s) saved`, "muted");
+
+    if (urls.length) {
+      const thumbnails = document.createElement("div");
+      thumbnails.className = "photo-preview";
+
+      urls.forEach(url => {
+        const img = document.createElement("img");
+        img.src = url;
+        img.alt = "Product photo";
+        img.loading = "lazy";
+        img.onerror = () => img.remove();
+        thumbnails.appendChild(img);
+      });
+
+      details.appendChild(thumbnails);
+    }
 
     const actions = document.createElement("div");
 
@@ -219,12 +291,15 @@ form.addEventListener("submit", async event => {
   saveButton.disabled = true;
 
   const id = document.querySelector("#product-id").value;
+  const imageUrls = getFormImageUrls();
+
   const product = {
     name: document.querySelector("#name").value.trim(),
     price: Number(document.querySelector("#price").value),
     category: document.querySelector("#category").value,
     description: document.querySelector("#description").value,
-    image_url: document.querySelector("#image-url").value.trim(),
+    image_url: imageUrls[0] || "",
+    image_urls: imageUrls,
     is_active: document.querySelector("#is-active").checked
   };
 
