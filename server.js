@@ -122,16 +122,29 @@ app.get("/health", (req, res) => {
   res.json({ status: "ok" });
 });
 
+
 app.post("/api/admin/login", (req, res) => {
   const { username, password } = req.body || {};
 
-  if (
-    typeof username !== "string" ||
-    typeof password !== "string" ||
-    !safeEqual(username, process.env.ADMIN_USERNAME) ||
-    !safeEqual(password, process.env.ADMIN_PASSWORD)
-  ) {
-    return res.status(401).json({ error: "Incorrect username or password." });
+  const usernameMatch =
+    typeof username === "string" &&
+    safeEqual(username, process.env.ADMIN_USERNAME);
+
+  const passwordMatch =
+    typeof password === "string" &&
+    safeEqual(password, process.env.ADMIN_PASSWORD);
+
+  console.log("Admin login diagnostic:", {
+    usernameMatch,
+    passwordMatch,
+    usernameReceived: typeof username === "string",
+    passwordReceived: typeof password === "string"
+  });
+
+  if (!usernameMatch || !passwordMatch) {
+    return res.status(401).json({
+      error: "Incorrect username or password."
+    });
   }
 
   setSessionCookie(res, makeSession());
