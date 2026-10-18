@@ -968,3 +968,120 @@ footer > p {
     height: 340px;
   }
 }
+
+/* Premium favourites section */
+#favorites-list {
+  display: grid;
+  gap: 14px;
+}
+
+.favorite-item {
+  display: grid;
+  grid-template-columns: 86px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 15px;
+  padding: 13px;
+  background: #fffaf3;
+  border: 1px solid #eadfdc;
+  border-radius: 15px;
+  box-shadow: 0 5px 18px rgba(75, 23, 56, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.favorite-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 9px 24px rgba(75, 23, 56, 0.11);
+}
+
+.favorite-image-link {
+  display: flex;
+  width: 86px;
+  height: 100px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #f1e5e9;
+}
+
+.favorite-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.favorite-image-placeholder {
+  padding: 7px;
+  color: #4b1738;
+  font-size: 11px;
+  text-align: center;
+}
+
+.favorite-details {
+  min-width: 0;
+}
+
+.favorite-name {
+  color: #4b1738;
+  font-size: 15px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.favorite-price {
+  margin: 6px 0;
+  color: #4b1738;
+  font-weight: 700;
+}
+
+.favorite-view {
+  display: inline-block;
+  color: #9b7537;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.favorite-remove {
+  padding: 8px 10px;
+  color: #4b1738;
+  background: white;
+  border: 1px solid #e4cbd7;
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.favorite-remove:hover {
+  color: white;
+  background: #4b1738;
+}
+
+.favorites-empty {
+  padding: 24px 14px;
+  color: #766b72;
+  text-align: center;
+  background: #fffaf3;
+  border: 1px dashed #d9c2ce;
+  border-radius: 14px;
+}
+
+@media (max-width: 480px) {
+  .favorite-item {
+    grid-template-columns: 66px minmax(0, 1fr);
+    gap: 11px;
+  }
+
+  .favorite-image-link {
+    width: 66px;
+    height: 82px;
+  }
+
+  .favorite-remove {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .favorite-name {
+    font-size: 13px;
+  }
+}
