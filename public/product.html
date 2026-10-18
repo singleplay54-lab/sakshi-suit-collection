@@ -1,0 +1,874 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#4b1738">
+  <title>Product Details | Sakshi Suit Collection</title>
+  <meta name="description" content="Explore suits, kurtis, gowns and party wear at Sakshi Suit Collection.">
+  <style>
+    :root {
+      --plum: #4b1738;
+      --plum-dark: #321025;
+      --gold: #c49a50;
+      --cream: #fffaf3;
+      --paper: #ffffff;
+      --text: #30252b;
+      --muted: #766b72;
+      --border: #eadfdc;
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .top-strip {
+      background: var(--plum-dark);
+      color: #fff;
+      text-align: center;
+      padding: 8px 12px;
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+
+    header {
+      background: var(--paper);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 5%;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      color: var(--plum);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(20px, 3vw, 29px);
+      font-weight: bold;
+    }
+
+    .brand small {
+      display: block;
+      color: var(--gold);
+      font: 10px Arial, sans-serif;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .back-link {
+      color: var(--plum);
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    main {
+      max-width: 1200px;
+      width: 90%;
+      margin: 26px auto 60px;
+    }
+
+    .breadcrumb {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 22px;
+    }
+
+    .breadcrumb a {
+      color: var(--plum);
+    }
+
+    .product-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+      gap: 44px;
+      align-items: start;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 24px;
+    }
+
+    .main-photo-wrap {
+      background: #f6eee8;
+      border-radius: var(--radius);
+      overflow: hidden;
+      aspect-ratio: 4 / 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .main-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .thumbnails {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .thumb {
+      width: 76px;
+      height: 90px;
+      border: 2px solid transparent;
+      border-radius: 9px;
+      overflow: hidden;
+      background: #f6eee8;
+      padding: 0;
+    }
+
+    .thumb.active {
+      border-color: var(--gold);
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-info {
+      padding: 12px 4px;
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .product-name {
+      color: var(--plum);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(27px, 4vw, 39px);
+      line-height: 1.25;
+      margin: 10px 0;
+      overflow-wrap: anywhere;
+    }
+
+    .category-pill {
+      display: inline-block;
+      background: #f7edf2;
+      color: var(--plum);
+      border-radius: 30px;
+      padding: 5px 13px;
+      font-size: 12px;
+      margin-bottom: 16px;
+    }
+
+    .price {
+      color: var(--plum);
+      font-size: 29px;
+      font-weight: bold;
+      margin: 5px 0 18px;
+    }
+
+    .description {
+      color: var(--muted);
+      white-space: pre-line;
+      overflow-wrap: anywhere;
+      margin: 16px 0 24px;
+    }
+
+    .info-divider {
+      border: 0;
+      border-top: 1px solid var(--border);
+      margin: 22px 0;
+    }
+
+    .store-note {
+      background: var(--cream);
+      border-left: 3px solid var(--gold);
+      padding: 13px 15px;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 22px;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 11px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 10px;
+      padding: 14px 18px;
+      border: 1px solid var(--plum);
+      font-weight: bold;
+      text-align: center;
+      transition: 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--plum);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--plum-dark);
+    }
+
+    .btn-secondary {
+      color: var(--plum);
+      background: white;
+    }
+
+    .btn-secondary:hover {
+      background: #f8eff3;
+    }
+
+    .similar-section {
+      margin-top: 58px;
+    }
+
+    .section-heading {
+      text-align: center;
+      margin-bottom: 26px;
+    }
+
+    .section-heading .eyebrow {
+      margin-bottom: 6px;
+    }
+
+    .section-heading h2 {
+      color: var(--plum);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(27px, 4vw, 36px);
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    .similar-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .product-card {
+      min-width: 0;
+      overflow: hidden;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 28px #32102512;
+    }
+
+    .card-photo-wrap {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      background: #f6eee8;
+      overflow: hidden;
+    }
+
+    .card-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s;
+    }
+
+    .product-card:hover .card-photo {
+      transform: scale(1.035);
+    }
+
+    .card-info {
+      padding: 13px;
+    }
+
+    .card-category {
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 10px;
+      font-weight: bold;
+    }
+
+    .card-name {
+      color: var(--plum);
+      font-weight: bold;
+      font-size: 14px;
+      line-height: 1.4;
+      margin: 5px 0 8px;
+      overflow-wrap: anywhere;
+    }
+
+    .card-price {
+      color: var(--plum);
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .view-product {
+      display: block;
+      text-align: center;
+      color: var(--plum);
+      border-top: 1px solid var(--border);
+      padding: 10px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .status {
+      text-align: center;
+      padding: 55px 15px;
+      color: var(--muted);
+    }
+
+    .status h2 {
+      color: var(--plum);
+      margin-bottom: 8px;
+    }
+
+    .status a {
+      display: inline-block;
+      margin-top: 18px;
+      color: var(--plum);
+      font-weight: bold;
+      text-decoration: underline;
+    }
+
+    .empty-similar {
+      text-align: center;
+      color: var(--muted);
+      grid-column: 1 / -1;
+      padding: 25px;
+    }
+
+    footer {
+      background: var(--plum-dark);
+      color: #f7eaf1;
+      text-align: center;
+      padding: 28px 15px;
+      font-size: 13px;
+    }
+
+    footer strong {
+      color: #e4c58c;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 18px;
+    }
+
+    @media (max-width: 900px) {
+      .product-layout {
+        gap: 25px;
+        padding: 18px;
+      }
+
+      .similar-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+    }
+
+    @media (max-width: 620px) {
+      header {
+        padding: 14px 5%;
+      }
+
+      main {
+        width: 92%;
+        margin-top: 18px;
+      }
+
+      .product-layout {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 13px;
+        border-radius: 15px;
+      }
+
+      .main-photo-wrap {
+        aspect-ratio: 4 / 4.6;
+      }
+
+      .product-info {
+        padding: 12px 5px 5px;
+      }
+
+      .product-name {
+        font-size: 29px;
+      }
+
+      .similar-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .card-info {
+        padding: 10px;
+      }
+
+      .card-name {
+        font-size: 13px;
+      }
+
+      .thumb {
+        width: 62px;
+        height: 75px;
+      }
+
+      .similar-section {
+        margin-top: 42px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="top-strip">
+    ELEGANCE FOR EVERY OCCASION · SAKSHI SUIT COLLECTION
+  </div>
+
+  <header>
+    <div class="header-inner">
+      <a class="brand" href="/">
+        Sakshi Suit Collection
+        <small>Style · Tradition · Elegance</small>
+      </a>
+      <a class="back-link" href="/">← All Collections</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="/">Home</a> / <span id="breadcrumb-name">Product Details</span>
+    </div>
+
+    <section id="loading" class="status">
+      <h2>Loading product...</h2>
+      <p>Please wait while we fetch the collection.</p>
+    </section>
+
+    <section id="error" class="status" hidden>
+      <h2>Product not found</h2>
+      <p>This product may have been removed or is currently unavailable.</p>
+      <a href="/">Explore all collections</a>
+    </section>
+
+    <section id="product-content" hidden>
+      <div class="product-layout">
+        <div class="gallery">
+          <div class="main-photo-wrap">
+            <img
+              id="main-photo"
+              class="main-photo"
+              src=""
+              alt="Product photo"
+            >
+          </div>
+          <div id="thumbnails" class="thumbnails"></div>
+        </div>
+
+        <div class="product-info">
+          <div class="eyebrow">Selected for you</div>
+          <h1 id="product-name" class="product-name"></h1>
+          <span id="product-category" class="category-pill"></span>
+          <div id="product-price" class="price"></div>
+
+          <hr class="info-divider">
+
+          <h3>Product Details</h3>
+          <p id="product-description" class="description"></p>
+
+          <div class="store-note">
+            <strong>Visit our store</strong><br>
+            Choodi Market, Hazira Chauraha, Gwalior, Madhya Pradesh.<br>
+            Browse your favourite design and purchase in-store.
+          </div>
+
+          <div class="actions">
+            <a id="whatsapp-button" class="btn btn-primary" href="#" target="_blank" rel="noopener">
+              Enquire on WhatsApp
+            </a>
+            <a
+              class="btn btn-secondary"
+              href="https://maps.app.goo.gl/d5s7GqEFMQUpjRfZ8"
+              target="_blank"
+              rel="noopener"
+            >
+              Get Store Directions
+            </a>
+            <a class="btn btn-secondary" href="/">
+              ← Continue Shopping
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <section class="similar-section">
+        <div class="section-heading">
+          <div class="eyebrow">More to love</div>
+          <h2>You May Also Like</h2>
+          <p>Explore more styles from our collection.</p>
+        </div>
+        <div id="similar-grid" class="similar-grid"></div>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <strong>Sakshi Suit Collection</strong>
+    <p>Choodi Market, Hazira Chauraha, Gwalior, Madhya Pradesh</p>
+    <p>Beautiful styles for every occasion.</p>
+  </footer>
+
+  <script>
+    /*
+      IMPORTANT:
+      Enter the shop's WhatsApp number below.
+      Use country code + number, digits only.
+      Example format: 91XXXXXXXXXX
+    */
+    const WHATSAPP_NUMBER = "";
+
+    const FALLBACK_IMAGE =
+      "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=700&q=85";
+
+    const loadingEl = document.getElementById("loading");
+    const errorEl = document.getElementById("error");
+    const contentEl = document.getElementById("product-content");
+    const mainPhoto = document.getElementById("main-photo");
+    const thumbnailsEl = document.getElementById("thumbnails");
+    const similarGrid = document.getElementById("similar-grid");
+
+    let allProducts = [];
+    let currentProduct = null;
+
+    function escapeHTML(value) {
+      return String(value ?? "").replace(/[&<>"']/g, function (char) {
+        return {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
+        }[char];
+      });
+    }
+
+    function safeImageUrl(value) {
+      if (typeof value !== "string") return "";
+      try {
+        const url = new URL(value);
+        if (url.protocol === "https:" || url.protocol === "http:") {
+          return url.href;
+        }
+      } catch (_) {}
+      return "";
+    }
+
+    function getProductImages(product) {
+      let urls = [];
+
+      if (Array.isArray(product.image_urls)) {
+        urls = product.image_urls;
+      } else if (typeof product.image_urls === "string") {
+        try {
+          const parsed = JSON.parse(product.image_urls);
+          if (Array.isArray(parsed)) urls = parsed;
+        } catch (_) {}
+      }
+
+      const primary = safeImageUrl(product.image_url);
+      const cleaned = urls.map(safeImageUrl).filter(Boolean);
+
+      if (primary) cleaned.unshift(primary);
+
+      return [...new Set(cleaned)].slice(0, 4).length
+        ? [...new Set(cleaned)].slice(0, 4)
+        : [FALLBACK_IMAGE];
+    }
+
+    function formatPrice(price) {
+      const amount = Number(price);
+      if (!Number.isFinite(amount)) return "Price on enquiry";
+
+      return amount.toLocaleString("en-IN", {
+        style: "currency",
+        currency: "INR",
+        maximumFractionDigits: 0
+      });
+    }
+
+    function setMainPhoto(url, button) {
+      mainPhoto.src = url;
+      mainPhoto.onerror = function () {
+        this.onerror = null;
+        this.src = FALLBACK_IMAGE;
+      };
+
+      document.querySelectorAll(".thumb").forEach(function (thumb) {
+        thumb.classList.remove("active");
+      });
+
+      if (button) button.classList.add("active");
+    }
+
+    function renderGallery(product) {
+      const images = getProductImages(product);
+      mainPhoto.alt = product.name || "Product photo";
+      thumbnailsEl.innerHTML = "";
+
+      images.forEach(function (url, index) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "thumb" + (index === 0 ? " active" : "");
+        button.setAttribute("aria-label", "View product image " + (index + 1));
+
+        const image = document.createElement("img");
+        image.src = url;
+        image.alt = (product.name || "Product") + " photo " + (index + 1);
+        image.loading = "lazy";
+        image.onerror = function () {
+          this.onerror = null;
+          this.src = FALLBACK_IMAGE;
+        };
+
+        button.appendChild(image);
+        button.addEventListener("click", function () {
+          setMainPhoto(url, button);
+        });
+
+        thumbnailsEl.appendChild(button);
+      });
+
+      setMainPhoto(images[0], thumbnailsEl.firstElementChild);
+    }
+
+    function renderWhatsApp(product) {
+      const button = document.getElementById("whatsapp-button");
+
+      if (!WHATSAPP_NUMBER) {
+        button.href = "#";
+        button.onclick = function (event) {
+          event.preventDefault();
+          alert("Shop ka WhatsApp number code mein add karna baaki hai.");
+        };
+        return;
+      }
+
+      const message =
+        "Hello Sakshi Suit Collection! I want to enquire about:\n" +
+        "Product: " + (product.name || "Product") + "\n" +
+        "Price: " + formatPrice(product.price) + "\n" +
+        "Product ID: " + product.id;
+
+      button.href =
+        "https://wa.me/" +
+        WHATSAPP_NUMBER.replace(/\D/g, "") +
+        "?text=" + encodeURIComponent(message);
+
+      button.onclick = null;
+    }
+
+    function renderSimilar(product) {
+      const currentId = String(product.id);
+      const category = String(product.category || "").trim().toLowerCase();
+
+      const available = allProducts.filter(function (item) {
+        return String(item.id) !== currentId &&
+          item.is_active !== false;
+      });
+
+      const sameCategory = available.filter(function (item) {
+        return String(item.category || "").trim().toLowerCase() === category;
+      });
+
+      const otherCategory = available.filter(function (item) {
+        return String(item.category || "").trim().toLowerCase() !== category;
+      });
+
+      // Show up to 7 other products; same category comes first.
+      const similar = [...sameCategory, ...otherCategory].slice(0, 7);
+
+      similarGrid.innerHTML = "";
+
+      if (similar.length === 0) {
+        similarGrid.innerHTML =
+          '<p class="empty-similar">More products will appear here as the collection grows.</p>';
+        return;
+      }
+
+      similar.forEach(function (item) {
+        const images = getProductImages(item);
+        const card = document.createElement("article");
+        card.className = "product-card";
+
+        const link = document.createElement("a");
+        link.href = "/product.html?id=" + encodeURIComponent(item.id);
+        link.setAttribute("aria-label", "View " + (item.name || "product"));
+
+        const photoWrap = document.createElement("div");
+        photoWrap.className = "card-photo-wrap";
+
+        const photo = document.createElement("img");
+        photo.className = "card-photo";
+        photo.src = images[0];
+        photo.alt = item.name || "Product";
+        photo.loading = "lazy";
+        photo.onerror = function () {
+          this.onerror = null;
+          this.src = FALLBACK_IMAGE;
+        };
+
+        photoWrap.appendChild(photo);
+
+        const info = document.createElement("div");
+        info.className = "card-info";
+        info.innerHTML =
+          '<div class="card-category">' +
+            escapeHTML(item.category || "Collection") +
+          '</div>' +
+          '<div class="card-name">' +
+            escapeHTML(item.name || "Beautiful design") +
+          '</div>' +
+          '<div class="card-price">' +
+            escapeHTML(formatPrice(item.price)) +
+          '</div>';
+
+        link.appendChild(photoWrap);
+        link.appendChild(info);
+        card.appendChild(link);
+
+        const viewLink = document.createElement("a");
+        viewLink.className = "view-product";
+        viewLink.href = "/product.html?id=" + encodeURIComponent(item.id);
+        viewLink.textContent = "VIEW PRODUCT →";
+        card.appendChild(viewLink);
+
+        similarGrid.appendChild(card);
+      });
+    }
+
+    function showProduct(product) {
+      currentProduct = product;
+
+      document.title =
+        (product.name || "Product Details") + " | Sakshi Suit Collection";
+
+      document.getElementById("breadcrumb-name").textContent =
+        product.name || "Product Details";
+
+      document.getElementById("product-name").textContent =
+        product.name || "Beautiful Design";
+
+      document.getElementById("product-category").textContent =
+        product.category || "Collection";
+
+      document.getElementById("product-price").textContent =
+        formatPrice(product.price);
+
+      document.getElementById("product-description").textContent =
+        product.description || "Please contact us for more details about this design.";
+
+      renderGallery(product);
+      renderWhatsApp(product);
+      renderSimilar(product);
+
+      loadingEl.hidden = true;
+      errorEl.hidden = true;
+      contentEl.hidden = false;
+    }
+
+    async function loadProduct() {
+      const params = new URLSearchParams(window.location.search);
+      const productId = params.get("id");
+
+      if (!productId) {
+        loadingEl.hidden = true;
+        errorEl.hidden = false;
+        return;
+      }
+
+      try {
+        const response = await fetch("/api/products", {
+          headers: { "Accept": "application/json" }
+        });
+
+        if (!response.ok) {
+          throw new Error("Could not load products");
+        }
+
+        const data = await response.json();
+
+        allProducts = Array.isArray(data)
+          ? data
+          : Array.isArray(data.products)
+            ? data.products
+            : [];
+
+        const product = allProducts.find(function (item) {
+          return String(item.id) === String(productId);
+        });
+
+        if (!product || product.is_active === false) {
+          loadingEl.hidden = true;
+          errorEl.hidden = false;
+          return;
+        }
+
+        showProduct(product);
+      } catch (error) {
+        console.error("Product page error:", error);
+        loadingEl.hidden = true;
+        errorEl.hidden = false;
+
+        const message = errorEl.querySelector("p");
+        message.textContent =
+          "Products could not be loaded right now. Please try again.";
+      }
+    }
+
+    loadProduct();
+  </script>
+</body>
+</html>
