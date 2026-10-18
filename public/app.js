@@ -123,16 +123,31 @@ function createProductCard(product) {
   fav.setAttribute("aria-label", "Toggle favourite");
   fav.setAttribute("aria-pressed", "false");
 
-  fav.addEventListener("click", () => {
-    const id = getProductData(card).id;
+  
+fav.addEventListener("click", (event) => {
+  event.preventDefault();
+  event.stopPropagation();
 
-    favorites = favorites.includes(id)
-      ? favorites.filter(item => item !== id)
-      : [...favorites, id];
+  const id = String(product.id);
 
-    saveFavorites();
-    renderFavorites();
-  });
+  if (!id || id === "undefined" || id === "null") {
+    showMessage("Product ID nahi mili. Product ko check karein.");
+    return;
+  }
+
+  if (favorites.includes(id)) {
+    favorites = favorites.filter(item => item !== id);
+  } else {
+    favorites.push(id);
+  }
+
+  fav.textContent = favorites.includes(id) ? "♥" : "♡";
+  fav.classList.toggle("is-favorite", favorites.includes(id));
+  fav.setAttribute("aria-pressed", String(favorites.includes(id)));
+
+  saveFavorites();
+  renderFavorites();
+});
 
   imageBox.appendChild(fav);
 
